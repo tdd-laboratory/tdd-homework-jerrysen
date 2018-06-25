@@ -30,6 +30,36 @@ class TestCase(unittest.TestCase):
     def test_no_integers(self):
         self.assert_extract("no integers", library.integers)
 
+    def test_iso8601_date(self):
+        self.assert_extract('I was born on 2015-07-25.', library.dates_iso8601, '2015-07-25')
+
+    def test_dates_fmt2(self):
+        self.assert_extract('I was born on 25 Jan 2017.', library.dates_fmt2, '25 Jan 2017')
+
+    def test_iso8601_date_valid_timestamp_T_hour_minute(self):
+        self.assert_extract("This is a valid timestamp 2012-01-12T03:00.", library.dates_iso8601, '2012-01-12T03:00')
+
+    def test_iso8601_date_valid_timestamp_space_hour_minute(self):
+        self.assert_extract("This is valid with space 2012-01-12 03:00.", library.dates_iso8601, '2012-01-12 03:00')
+
+    def test_iso8601_date_valid_timestamp_T_hour_minute_second(self):
+        self.assert_extract("This is a valid timestamp 2012-01-12T03:00:25.", library.dates_iso8601, '2012-01-12T03:00:25')
+
+    def test_iso8601_date_valid_timestamp_space_hour_minute_second(self):
+        self.assert_extract("This is a valid timestamp 2012-01-12 03:00:25.", library.dates_iso8601, '2012-01-12 03:00:25')
+
+    def test_iso8601_date_valid_timestamp_T_hour_minute_second_millisecond(self):
+        self.assert_extract("This is a valid timestamp 2012-01-12T03:00:25.033.", library.dates_iso8601, '2012-01-12T03:00:25.033')
+
+    def test_iso8601_date_valid_timestamp_space_hour_minute_second_millisecond(self):
+        self.assert_extract("This is a valid timestamp 2012-01-12 03:00:25.033.", library.dates_iso8601, '2012-01-12 03:00:25.033')
+
+    def test_iso8601_date_invalid_timestamp_T__hour_minute(self):
+        self.assert_extract("This is a invalid timestamp 2012.01.12T03:00.", library.dates_iso8601, '2012-01-12T03:00')
+
+    def test_iso8601_date_invalid_date(self):
+        self.assert_extract("This is a invalid timestamp 2012/01/12.", library.dates_iso8601, '2012-01-12')
+
 
 if __name__ == '__main__':
     unittest.main()
